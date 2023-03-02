@@ -21,11 +21,10 @@
 
   <div class="chat-body">
     <div class="chat-body-container">
-
       <div *ngFor="let message of receivedMessages">
         <div class="single-message-container"
              [ngClass]="{'right-message-position' : (message.from.userId === this.currentUserId)}">
-          <div class="message-from" *ngIf="message.from.userId !== this.currentUserId">
+          <div class="message-from" *ngIf="message.from.userId !== this.currentUserId && currentChat.isGroup">
             <div class="message-from-icon-big"></div>
             <div class="message-from-name">
               {{message.from.name}}

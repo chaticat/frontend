@@ -8,4 +8,5 @@ export interface Chat {
   lastMessage: ChatMessage;
   participants: User[]
   lastInteraction: boolean
+  isGroup: boolean
 }
