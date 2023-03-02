@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"), url(./assets/fonts/inter/Inter-VariableFont_slnt,wght.ttf) format("truetype");
+}
+
+:root {
+  --main-nav-tabs-color: #212121;
+  --main-nav-tabs-hover-color: #424242;
+  --border-color: #3b3b3b;
+  --text-color: #F6F8F9;
+  --message-text-color: #f3f3f3;
+  --input-fields-color: #212121;
+  --action-icons-color: #2B2B2B;
+  --main-buttons-color: #5b4c9f;
+  --chat-message-color: #5b4c9f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", serif;
+}
+
+::-webkit-scrollbar {
+  width: 0.35rem;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6e6e6e;
+  border-radius: 20px;
+}

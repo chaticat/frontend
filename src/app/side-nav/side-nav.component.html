@@ -1,0 +1,39 @@
+<div class="side-nav">
+
+  <div class="side-nav-header">
+    <div class="side-nav-menu-icon">
+      <button mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div class="side-nav-search">
+      <input class="search-input" placeholder="Search">
+    </div>
+  </div>
+
+  <div class="side-nav-body" *ngFor="let chat of userChats">
+    <div class="chat"
+         (click)="openNewChat(chat)"
+         [ngClass]="{'chat-selected' : lastInteractionChatId === chat.id}">
+      <div class="chat-image-container">
+        <div class="chat-image">
+        </div>
+      </div>
+      <div class="chat-details">
+        <div class="chat-name">
+          {{chat.chatName}}
+        </div>
+        <div class="chat-last-message">
+          {{chat.lastMessage.content}}
+        </div>
+      </div>
+      <div class="chat-last-message-details">
+        <div class="chat-last-message-time">10:11</div>
+        <div class="chat-last-message-status">-</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+

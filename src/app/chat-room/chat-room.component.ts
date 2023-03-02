@@ -1,8 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { RxStompService } from '../service/rx-stomp.service';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
-import { MessageRequest } from './dto/message-request';
+import { MessageStatus } from '../common/model/message-status';
+import { ChatMessage, Sender } from '../common/model/chat-message';
+import { MessageRequest } from './model/message-request';
+import { ChatNavigationService } from '../common/service/chat-navigation.service';
+import { Chat } from '../common/model/chat';
 
 @Component({
   selector: 'app-chat-room',
@@ -10,20 +14,50 @@ import { MessageRequest } from './dto/message-request';
   styleUrls: ['./chat-room.component.scss'],
 })
 export class ChatRoomComponent implements OnInit, OnDestroy {
-  receivedMessages: string[] = [];
-  // @ts-ignore
+
+  currentChatId: string;
+  currentChat: Chat;
+  receivedMessages: ChatMessage[] = [];
+  private cachedMessagesForChat: ChatMessage[] = [];
   private topicSubscription: Subscription;
   messageInputValue: string;
+  currentUserId: string
 
-  constructor(private rxStompService: RxStompService) {
-    this.messageInputValue = "";
+  constructor(private rxStompService: RxStompService, private chatNavigationService: ChatNavigationService) {
+    this.messageInputValue = '';
+    this.currentUserId = '1';
+
+    this.chatNavigationService.chatSource$.subscribe(chat => {
+      this.currentChatId = chat.id;
+      this.currentChat = chat;
+      this.topicSubscription.unsubscribe();
+      this.initChatSubscription();
+    })
   }
 
   ngOnInit() {
+    this.initChatSubscription();
+  }
+
+  private initChatSubscription() {
+    this.receivedMessages = [];
+    this.cachedMessagesForChat = JSON.parse(localStorage.getItem(this.currentChatId));
+    if (this.cachedMessagesForChat === null) {
+      this.cachedMessagesForChat = [] as ChatMessage[];
+    } else {
+      this.cachedMessagesForChat.forEach(val => this.receivedMessages.push(Object.assign({}, val)));
+    }
+
     this.topicSubscription = this.rxStompService
-      .watch('/topic/chat')
+      .watch('/topic/chat/' + this.currentChatId)
       .subscribe((message: Message) => {
-        this.receivedMessages.push(message.body);
+        const chatMessage: ChatMessage = JSON.parse(message.body);
+
+        if (chatMessage.from.userId !== this.currentUserId) {
+          this.putMessageToLocalStorage(chatMessage);
+        }
+
+        this.receivedMessages.push(chatMessage);
       });
   }
 
@@ -32,9 +66,38 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   }
 
   onSendMessage() {
-    const message = {} as MessageRequest;
-    message.message = this.messageInputValue;
+    const messageRequest = this.buildMessageRequest();
+    this.putMessageToLocalStorage(messageRequest.message)
+    this.messageInputValue = '';
+    this.rxStompService.publish({destination: '/app/chat', body: JSON.stringify(messageRequest)});
+  }
 
-    this.rxStompService.publish({destination: '/app/chat', body: JSON.stringify(message)});
+  private buildMessageRequest() {
+    const sender = {} as Sender;
+    sender.userId = this.currentUserId;
+    sender.name = 'Vitalii';
+
+    const message = {} as ChatMessage;
+    message.chatId = this.currentChatId;
+    message.from = sender;
+    message.content = this.messageInputValue;
+    message.status = MessageStatus.PENDING;
+
+    const messageRequest = {} as MessageRequest;
+    messageRequest.message = message;
+
+    return messageRequest;
+  }
+
+  private putMessageToLocalStorage(chatMessage: ChatMessage) {
+    if (chatMessage.content !== '') {
+      this.cachedMessagesForChat.push(chatMessage);
+      localStorage.removeItem(this.currentChatId);
+      localStorage.setItem(this.currentChatId, JSON.stringify(this.cachedMessagesForChat));
+    }
+  }
+
+  onKeydown($event: any) {
+    $event.preventDefault();
   }
 }

@@ -1,13 +1,69 @@
-<div id="messages">
-  <input type="text" [(ngModel)]="messageInputValue" name="text-input">
-  <button class="btn btn-primary" (click)="onSendMessage()">
-    Send Test Message
-  </button>
-  <h2>Received messages</h2>
-  <ol>
-    <!-- we will use Angular binding to populate list of messages -->
-    <li class="message" *ngFor="let message of receivedMessages">
-      {{ message }}
-    </li>
-  </ol>
+<div class="chat">
+  <div class="chat-header">
+    <div class="chat-info">
+      <div class="message-from-icon-big">
+      </div>
+      <div class="chat-name-container">
+        <b class="chat-name">
+          {{ currentChat.chatName }}
+        </b>
+        <div class="last-online-status">
+          10 min ago
+        </div>
+      </div>
+    </div>
+    <div class="chat-header-actions">
+      <button mat-icon-button>
+        <mat-icon class="chat-header-actions-icon">keyboard_arrow_down</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="chat-body">
+    <div class="chat-body-container">
+
+      <div *ngFor="let message of receivedMessages">
+        <div class="single-message-container"
+             [ngClass]="{'right-message-position' : (message.from.userId === this.currentUserId)}">
+          <div class="message-from" *ngIf="message.from.userId !== this.currentUserId">
+            <div class="message-from-icon-big"></div>
+            <div class="message-from-name">
+              {{message.from.name}}
+            </div>
+          </div>
+          <div class="message">
+        <span>
+        {{ message.content }}
+        </span>
+          </div>
+          <div class="message-details">
+            <div class="message-time">
+              11:10
+            </div>
+            <!-- <div class="message-status" *ngIf="message.from.userId === this.currentUserId">
+               {{ message.status }}
+             </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-footer">
+     <textarea class="message-input"
+               matInput
+               cdkTextareaAutosize
+               cdkAutosizeMinRows="1"
+               cdkAutosizeMaxRows="6"
+               [placeholder]="'Message'"
+               (keyup.enter)="onSendMessage()"
+               (keydown.enter)="onKeydown($event)"
+               [(ngModel)]="messageInputValue">
+     </textarea>
+    <button mat-fab class="btn btn-primary send-message-btn" (click)="onSendMessage()">
+      <mat-icon aria-hidden="false" aria-label="Send" fontIcon="send">
+      </mat-icon>
+    </button>
+  </div>
+
 </div>
