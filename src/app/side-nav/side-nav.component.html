@@ -21,7 +21,7 @@
       </div>
       <div class="chat-details">
         <div class="chat-name">
-          {{chat.chatName}}
+          {{chat.name}}
         </div>
         <div class="chat-last-message">
           {{chat.lastMessage.content}}
@@ -32,7 +32,25 @@
         <div class="chat-last-message-status">-</div>
       </div>
     </div>
+  </div>
 
+  <div class="side-nav-footer">
+    <div class="create-chat-btn-side-box">
+      <button mat-fab class="btn btn-primary create-chat-side-btn" [matMenuTriggerFor]="menu">
+        <mat-icon aria-hidden="false" aria-label="edit" fontIcon="edit">
+        </mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item>
+          <mat-icon>chat</mat-icon>
+          <span>Create new chat</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>group</mat-icon>
+          <span>Create new group</span>
+        </button>
+      </mat-menu>
+    </div>
   </div>
 </div>
 

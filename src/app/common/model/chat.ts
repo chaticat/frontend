@@ -3,10 +3,9 @@ import { User } from './user';
 
 export interface Chat {
   id: string
-  chatName: string,
+  name: string,
   iconUrl: string,
   lastMessage: ChatMessage;
   participants: User[]
-  lastInteraction: boolean
   isGroup: boolean
 }

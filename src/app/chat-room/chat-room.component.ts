@@ -66,10 +66,12 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   }
 
   onSendMessage() {
-    const messageRequest = this.buildMessageRequest();
-    this.putMessageToLocalStorage(messageRequest.message)
-    this.messageInputValue = '';
-    this.rxStompService.publish({destination: '/app/chat', body: JSON.stringify(messageRequest)});
+    if (this.messageInputValue !== '') {
+      const messageRequest = this.buildMessageRequest();
+      this.putMessageToLocalStorage(messageRequest.message)
+      this.messageInputValue = '';
+      this.rxStompService.publish({destination: '/app/chat', body: JSON.stringify(messageRequest)});
+    }
   }
 
   private buildMessageRequest() {

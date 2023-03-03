@@ -16,6 +16,7 @@ import { MainComponent } from './main/main.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { MatInputModule } from '@angular/material/input';
 import { SideNavComponent } from './side-nav/side-nav.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,8 +27,10 @@ import { SideNavComponent } from './side-nav/side-nav.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     FormsModule,
+    MatMenuModule,
     MatIconModule,
     MatButtonModule,
     NoopAnimationsModule,
