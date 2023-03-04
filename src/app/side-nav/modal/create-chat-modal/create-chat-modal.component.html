@@ -1,0 +1,25 @@
+
+<div class="create-chat-dialog-container">
+<h1 mat-dialog-title *ngIf="isGroup">Crate new group</h1>
+<h1 mat-dialog-title *ngIf="!isGroup">Crate new chat</h1>
+
+  <mat-dialog-content [formGroup]="form">
+
+    <mat-form-field *ngIf="isGroup">
+      <input matInput
+             placeholder="Group name"
+             formControlName="name">
+    </mat-form-field>
+
+    <mat-select *ngIf="!isGroup" formControlName="contactId" placeholder="Search contact">
+      <mat-option *ngFor="let contact of contacts | async" [value]="contact.id">
+        {{contact.username}}
+      </mat-option>
+    </mat-select>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="close()">Close</button>
+    <button color="primary" mat-raised-button (click)="save()">Save</button>
+  </mat-dialog-actions>
+</div>

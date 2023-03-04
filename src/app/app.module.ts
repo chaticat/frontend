@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { rxStompServiceFactory } from './service/rx-stomp-service-factory';
 import { RxStompService } from './service/rx-stomp.service';
@@ -17,13 +17,18 @@ import { NgxEditorModule } from 'ngx-editor';
 import { MatInputModule } from '@angular/material/input';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CreateChatModalComponent } from './side-nav/modal/create-chat-modal/create-chat-modal.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatRoomComponent,
     SideNavComponent,
-    MainComponent
+    MainComponent,
+    CreateChatModalComponent
   ],
   imports: [
     BrowserModule,
@@ -33,18 +38,28 @@ import { HttpClientModule } from '@angular/common/http';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
     NoopAnimationsModule,
     MatMenuModule,
     MatButtonModule,
     FontAwesomeModule,
     NgxEditorModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule,
+    NgxMatSelectSearchModule,
+    MatSelectModule
   ],
   providers: [
     {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
     },
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        hasBackdrop: false
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })

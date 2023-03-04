@@ -1,6 +1,6 @@
 <div class="chat">
 
-  <div class="chat-header">
+  <div class="chat-header" *ngIf="currentChat !== undefined">
     <div class="chat-info">
       <div class="message-from-icon-big">
       </div>
@@ -8,7 +8,7 @@
         <b class="chat-name">
           {{ currentChat.name }}
         </b>
-        <div class="last-online-status">
+        <div class="last-online-status" *ngIf="currentChat.group == false">
           10 min ago
         </div>
       </div>
@@ -20,12 +20,12 @@
     </div>
   </div>
 
-  <div class="chat-body">
+  <div class="chat-body" *ngIf="currentChat !== undefined">
     <div class="chat-body-container">
       <div *ngFor="let message of receivedMessages">
         <div class="single-message-container"
              [ngClass]="{'right-message-position' : (message.from.userId === this.currentUserId)}">
-          <div class="message-from" *ngIf="message.from.userId !== this.currentUserId && currentChat.isGroup">
+          <div class="message-from" *ngIf="message.from.userId !== this.currentUserId && currentChat.group">
             <div class="message-from-icon-big"></div>
             <div class="message-from-name">
               {{message.from.name}}
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div class="chat-footer">
+  <div class="chat-footer" *ngIf="currentChat !== undefined">
      <textarea class="message-input"
                matInput
                cdkTextareaAutosize

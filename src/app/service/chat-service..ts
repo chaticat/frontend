@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Chat } from '../common/model/chat';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { EmptyChatRequest } from '../side-nav/model/empty-chat-request';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,10 @@ export class ChatService implements OnInit {
 
   createChatWithUser(userId: string): Observable<Chat> {
     return this.http.post<Chat>(environment.API_URL + '/chat/' + userId, null);
+  }
+
+  createEmptyChat(request: EmptyChatRequest): Observable<Chat> {
+    return this.http.post<Chat>(environment.API_URL + '/chat', request);
   }
 
 }

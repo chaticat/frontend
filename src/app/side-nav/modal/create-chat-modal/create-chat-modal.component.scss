@@ -1,0 +1,33 @@
+
+.create-chat-dialog-container {
+  background-color: var(--modal-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-color);
+
+  input {
+    color: var(--text-color);
+    text-align: center;
+  }
+}
+
+.mat-mdc-dialog-title {
+  color: var(--text-color);
+  text-align: center;
+  font-family: "Inter", serif;
+  font-size: 18px;
+}
+
+.mat-mdc-dialog-content {
+  color: var(--text-color);
+  font-family: "Inter", serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14px;
+  padding-bottom: 0;
+}

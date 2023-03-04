@@ -29,6 +29,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
 
     this.chatNavigationService.chatSource$.subscribe(chat => {
       this.currentChatId = chat.id;
+      console.log(chat)
       this.currentChat = chat;
       this.topicSubscription.unsubscribe();
       this.initChatSubscription();

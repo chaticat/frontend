@@ -124,12 +124,22 @@
 
       .create-chat-side-btn {
         background-color: var(--main-buttons-color);
-
-        .mat-icon {
-          color: var(--text-color);
-        }
       }
 
+      .create-chat-side-btn:hover {
+        background-color: var(--main-buttons-hover-color);
+      }
     }
   }
+}
+
+.mat-mdc-menu-content {
+  margin-bottom: 10px !important;
+  border-radius: 10px;
+  color: var(--text-color);
+  background-color: var(--modal-color);
+}
+
+.mat-menu-item:hover {
+  background-color: var(--modal-item-hover-color);
 }

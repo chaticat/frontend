@@ -117,6 +117,10 @@
           }
         }
       }
+
+      .single-message-container:hover {
+        background-color: var(--chat-message-hover-color);
+      }
     }
   }
 
@@ -159,12 +163,20 @@
         font-size: 20px;
       }
     }
+
+    .send-message-btn:hover {
+      background-color: var(--main-buttons-hover-color);
+    }
   }
 }
 
 .right-message-position {
   margin-left: auto;
-  background-color: var(--chat-message-own-color)!important;
+  background-color: var(--chat-message-own-color) !important;
   max-width: 70%
+}
+
+.right-message-position:hover {
+  background-color: var(--chat-message-own-hover-color) !important;
 }
 

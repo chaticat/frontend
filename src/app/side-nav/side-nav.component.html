@@ -24,7 +24,7 @@
           {{chat.name}}
         </div>
         <div class="chat-last-message">
-          {{chat.lastMessage.content}}
+          {{chat.lastMessage?.content}}
         </div>
       </div>
       <div class="chat-last-message-details">
@@ -41,11 +41,11 @@
         </mat-icon>
       </button>
       <mat-menu #menu="matMenu" xPosition="before">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="openCreateNewChatModal()">
           <mat-icon>chat</mat-icon>
           <span>Create new chat</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="openCreateNewGroupModal()">
           <mat-icon>group</mat-icon>
           <span>Create new group</span>
         </button>

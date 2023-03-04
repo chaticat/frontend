@@ -4,6 +4,10 @@ import { Chat } from '../common/model/chat';
 import { ChatMessage } from '../common/model/chat-message';
 import { MessageStatus } from '../common/model/message-status';
 import { ChatService } from '../service/chat-service.';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CreateChatModalComponent } from './modal/create-chat-modal/create-chat-modal.component';
+import { EmptyChatRequest } from './model/empty-chat-request';
+import { UserService } from '../service/user-service.';
 
 @Component({
   selector: 'app-side-nav',
@@ -16,19 +20,27 @@ export class SideNavComponent implements OnInit {
   userChats: Chat[] = [];
   lastInteractionChatId: string;
 
-  constructor(private chatNavigationService: ChatNavigationService, private chatService: ChatService) {
+  constructor(private chatNavigationService: ChatNavigationService,
+              private chatService: ChatService,
+              private userService: UserService,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
 
-/*    this.chatService.getAllChatsForUser().subscribe(chats => {
-      this.userChats = chats;
-      this.lastInteractionChatId = chats[0].id;
-    });*/
+    this.chatService.getAllChatsForUser().subscribe(chats => {
 
-    this.initDummyData();
-    this.lastInteractionChatId = this.userChats[0].id;
-    this.openNewChat(this.userChats[0])
+      if (chats.length === 0) {
+
+      } else {
+        this.userChats = chats;
+        this.lastInteractionChatId = chats[0].id;
+        this.openNewChat(this.userChats[0])
+      }
+    });
+
+    //this.initDummyData();
+    //this.lastInteractionChatId = this.userChats[0].id;
   }
 
   openNewChat(chat: Chat) {
@@ -60,5 +72,53 @@ export class SideNavComponent implements OnInit {
     chat2.lastMessage = chat2LastMessage;
 
     this.userChats.push(chat2);
+  }
+
+  openCreateNewChatModal() {
+    let contactsForUser = this.userService.getAllContactsForUser();
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      isGroup: false,
+      contacts: contactsForUser
+    }
+
+    let dialogRef = this.dialog.open(CreateChatModalComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      data => {
+        this.createChat(data);
+      }
+    );
+  }
+
+  private createChat(data) {
+    this.chatService.createChatWithUser(data.contactId)
+      .subscribe(chat => this.userChats.unshift(chat));
+  }
+
+  openCreateNewGroupModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      isGroup: true,
+    }
+
+    let dialogRef = this.dialog.open(CreateChatModalComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      data => {
+        this.createEmptyChat(data);
+      }
+    );
+  }
+
+  private createEmptyChat(data) {
+    const emptyChatRequest = {} as EmptyChatRequest;
+    emptyChatRequest.name = data.name;
+
+    this.chatService.createEmptyChat(emptyChatRequest)
+      .subscribe(chat => this.userChats.unshift(chat));
   }
 }

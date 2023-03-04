@@ -7,5 +7,5 @@ export interface Chat {
   iconUrl: string,
   lastMessage: ChatMessage;
   participants: User[]
-  isGroup: boolean
+  group: boolean
 }
