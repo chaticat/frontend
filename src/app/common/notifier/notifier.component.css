@@ -1,0 +1,39 @@
+
+::ng-deep .snackbar-container {
+  background: #5892ec;
+  letter-spacing: 0.1vh;
+  font-weight: bold;
+  color: #fff;
+  max-width: 380px;
+}
+
+.error {
+  background: #cb3737 !important;
+}
+
+.content {
+  text-align: center;
+}
+
+@media (max-width: 870px) {
+  ::ng-deep .snackbar-container {
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;
+    margin-bottom: 32vh !important;
+
+    transition: transform 3s ease-in-out;
+    transition-delay: 1s;
+  }
+}
+
+@media (max-width: 570px) {
+  ::ng-deep .snackbar-container {
+    margin-left: 2.5rem !important;
+    margin-right: 2.5rem !important;
+    margin-bottom: 32vh !important;
+
+    transition: transform 3s ease-in-out;
+    transition-delay: 1s;
+  }
+}
+
