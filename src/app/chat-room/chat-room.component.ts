@@ -70,8 +70,14 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
     if (this.messageInputValue !== '') {
       const messageRequest = this.buildMessageRequest();
       this.putMessageToLocalStorage(messageRequest.message)
+
       this.messageInputValue = '';
-      this.rxStompService.publish({destination: '/app/chat', body: JSON.stringify(messageRequest)});
+
+      this.rxStompService.publish({
+        destination: '/app/chat',
+        headers: {Authorization: '2', RefreshToken: '9'},
+        body: JSON.stringify(messageRequest)
+      });
     }
   }
 

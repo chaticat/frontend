@@ -28,6 +28,8 @@ import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 import { TokenInterceptor } from './common/interceptors/token.interceptor';
 import { ErrorInterceptor } from './common/interceptors/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRippleModule } from '@angular/material/core';
+import { LoaderComponent } from './common/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MainComponent,
     CreateChatModalComponent,
     NotifierComponent,
-    AuthComponent
+    AuthComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +60,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ReactiveFormsModule,
     NgxMatSelectSearchModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatRippleModule
   ],
   providers: [
     AuthGuard,

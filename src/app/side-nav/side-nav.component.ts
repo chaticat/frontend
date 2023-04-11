@@ -8,6 +8,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateChatModalComponent } from './modal/create-chat-modal/create-chat-modal.component';
 import { EmptyChatRequest } from './model/empty-chat-request';
 import { UserService } from '../service/user-service.';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -23,6 +24,7 @@ export class SideNavComponent implements OnInit {
   constructor(private chatNavigationService: ChatNavigationService,
               private chatService: ChatService,
               private userService: UserService,
+              private authService: AuthService,
               private dialog: MatDialog) {
   }
 
@@ -120,5 +122,9 @@ export class SideNavComponent implements OnInit {
 
     this.chatService.createEmptyChat(emptyChatRequest)
       .subscribe(chat => this.userChats.unshift(chat));
+  }
+
+  logout() {
+    this.authService.logout()
   }
 }

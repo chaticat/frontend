@@ -135,11 +135,12 @@
 
 .mat-mdc-menu-content {
   margin-bottom: 10px !important;
-  border-radius: 10px;
+  border-radius: 4px;
+  font-size: 11px;
   color: var(--text-color);
   background-color: var(--modal-color);
 }
 
-.mat-menu-item:hover {
+.mat-mdc-menu-item:hover {
   background-color: var(--modal-item-hover-color);
 }

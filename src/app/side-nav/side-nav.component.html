@@ -1,10 +1,16 @@
 <div class="side-nav">
 
   <div class="side-nav-header">
-    <div class="side-nav-menu-icon">
-      <button mat-icon-button>
+    <div class="side-nav-menu-icon" matRipple>
+      <button mat-icon-button [mat-menu-trigger-for]="mainMenu">
         <mat-icon>menu</mat-icon>
       </button>
+      <mat-menu #mainMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
     </div>
     <div class="side-nav-search">
       <input class="search-input" placeholder="Search">
@@ -36,11 +42,11 @@
 
   <div class="side-nav-footer">
     <div class="create-chat-btn-side-box">
-      <button mat-fab class="btn btn-primary create-chat-side-btn" [matMenuTriggerFor]="menu">
+      <button mat-fab class="btn btn-primary create-chat-side-btn" [matMenuTriggerFor]="newChatMenu">
         <mat-icon aria-hidden="false" aria-label="edit" fontIcon="edit">
         </mat-icon>
       </button>
-      <mat-menu #menu="matMenu" xPosition="before">
+      <mat-menu #newChatMenu="matMenu" xPosition="before">
         <button mat-menu-item (click)="openCreateNewChatModal()">
           <mat-icon>chat</mat-icon>
           <span>Create new chat</span>
