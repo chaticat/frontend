@@ -93,7 +93,7 @@ export class AuthComponent implements OnInit {
           this.notifierService.showSuccessNotification('Successfully registered!', 2000)
           setTimeout(() => {
             document.getElementById('sign-in-btn').click();
-          }, 3000)
+          }, 2000)
 
           this.registerForm.reset();
         },

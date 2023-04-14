@@ -105,8 +105,8 @@
           display: flex;
           flex-direction: column;
           align-self: flex-end;
-          justify-content: end;
-          align-items: end;
+          justify-content: flex-end;
+          align-items: flex-end;
 
           .message-time {
             margin-top: auto;

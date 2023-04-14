@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChatNavigationService } from '../common/service/chat-navigation.service';
 import { Chat } from '../common/model/chat';
-import { ChatMessage } from '../common/model/chat-message';
-import { MessageStatus } from '../common/model/message-status';
 import { ChatService } from '../service/chat-service.';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateChatModalComponent } from './modal/create-chat-modal/create-chat-modal.component';
 import { EmptyChatRequest } from './model/empty-chat-request';
 import { UserService } from '../service/user-service.';
 import { AuthService } from '../auth/auth.service';
+import { SearchService } from '../service/search-service.';
+import { UserSearchResponse } from '../common/model/user-search-response';
 
 @Component({
   selector: 'app-side-nav',
@@ -20,11 +20,15 @@ export class SideNavComponent implements OnInit {
 
   userChats: Chat[] = [];
   lastInteractionChatId: string;
+  searchText: string;
+  isSearchEnabled: boolean
+  userSearchResponses: UserSearchResponse[] = [];
 
   constructor(private chatNavigationService: ChatNavigationService,
               private chatService: ChatService,
               private userService: UserService,
               private authService: AuthService,
+              private searchService: SearchService,
               private dialog: MatDialog) {
   }
 
@@ -40,40 +44,11 @@ export class SideNavComponent implements OnInit {
         this.openNewChat(this.userChats[0])
       }
     });
-
-    //this.initDummyData();
-    //this.lastInteractionChatId = this.userChats[0].id;
   }
 
   openNewChat(chat: Chat) {
     this.lastInteractionChatId = chat.id;
     this.chatNavigationService.openChat(chat);
-  }
-
-  private initDummyData() {
-    let chat1 = {} as Chat;
-    chat1.id = '100';
-    chat1.name = 'Saved messages'
-
-    let chat1LastMessage = {} as ChatMessage;
-    chat1LastMessage.content = 'hello world'
-    chat1LastMessage.status = MessageStatus.DELIVERED
-
-    chat1.lastMessage = chat1LastMessage;
-
-    this.userChats.push(chat1);
-
-    let chat2 = {} as Chat;
-    chat2.id = '101';
-    chat2.name = 'Vitalii Stefanchak'
-
-    let chat2LastMessage = {} as ChatMessage;
-    chat2LastMessage.content = 'Дивовижно'
-    chat2LastMessage.status = MessageStatus.PENDING
-
-    chat2.lastMessage = chat2LastMessage;
-
-    this.userChats.push(chat2);
   }
 
   openCreateNewChatModal() {
@@ -126,5 +101,18 @@ export class SideNavComponent implements OnInit {
 
   logout() {
     this.authService.logout()
+  }
+
+  search($event: any) {
+    if ($event.target.value === '') {
+      this.isSearchEnabled = false;
+      this.userSearchResponses = [];
+    } else {
+      this.isSearchEnabled = true;
+      this.searchService.searchUsers($event.target.value)
+        .subscribe(response => {
+          this.userSearchResponses = response;
+        });
+    }
   }
 }

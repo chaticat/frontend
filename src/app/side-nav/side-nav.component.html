@@ -13,31 +13,63 @@
       </mat-menu>
     </div>
     <div class="side-nav-search">
-      <input class="search-input" placeholder="Search">
+      <input class="search-input" placeholder="Search" [ngModel]="searchText" (keyup)="search($event)">
     </div>
   </div>
 
-  <div class="side-nav-body" *ngFor="let chat of userChats">
-    <div class="chat"
-         (click)="openNewChat(chat)"
-         [ngClass]="{'chat-selected' : lastInteractionChatId === chat.id}">
-      <div class="chat-image-container">
-        <div class="chat-image">
+  <div class="side-nav-body">
+    <div *ngIf="!isSearchEnabled">
+      <div *ngFor="let chat of userChats">
+        <div class="chat"
+             (click)="openNewChat(chat)"
+             [ngClass]="{'chat-selected' : lastInteractionChatId === chat.id}">
+          <div class="chat-image-container">
+            <div class="chat-image">
+            </div>
+          </div>
+          <div class="chat-details">
+            <div class="chat-name">
+              {{chat.name}}
+            </div>
+            <div class="chat-last-message">
+              {{chat.lastMessage?.content}}
+            </div>
+          </div>
+          <div class="chat-last-message-details">
+            <div class="chat-last-message-time">10:11</div>
+            <div class="chat-last-message-status">-</div>
+          </div>
         </div>
-      </div>
-      <div class="chat-details">
-        <div class="chat-name">
-          {{chat.name}}
-        </div>
-        <div class="chat-last-message">
-          {{chat.lastMessage?.content}}
-        </div>
-      </div>
-      <div class="chat-last-message-details">
-        <div class="chat-last-message-time">10:11</div>
-        <div class="chat-last-message-status">-</div>
       </div>
     </div>
+
+    <div *ngIf="isSearchEnabled">
+
+
+      <div>Global Users</div>
+
+      <div *ngFor="let userSearchResult of userSearchResponses">
+        <div class="chat">
+          <div class="chat-image-container">
+            <div class="chat-image">
+            </div>
+          </div>
+          <div class="chat-details">
+            <div class="chat-name">
+              {{userSearchResult.username}}
+            </div>
+            <div class="chat-last-message">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="userSearchResponses.length === 0">
+        Nothing is found
+      </div>
+
+    </div>
+
   </div>
 
   <div class="side-nav-footer">
