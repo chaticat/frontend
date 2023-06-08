@@ -11,27 +11,46 @@
     height: 50px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
+    padding-left: 7px;
+    padding-right: 7px;
 
     .side-nav-menu-icon {
-      text-align: center;
-      width: 20%;
     }
 
     .side-nav-search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      width: 80%;
+      width: 100%;
 
       .search-input {
-        width: 95%;
-        margin-right: 20px;
+        width: 96%;
+        margin-right: 8px;
+        margin-left: 8px;
         margin-top: 1px;
         padding: 10px 12px;
         border-radius: 20px;
         border: 1px var(--border-color);
         background-color: var(--action-icons-color);
         color: var(--text-color);
+        transition: left 0.0s ease-out;
+      }
+
+      .search-shrink {
+        width: 70%;
+      }
+
+      .search-params {
+        transition: all 0.9s ease-in;
+        display: none;
+        font-size: 13px;
+      }
+
+      .search-params-show {
+        display: block;
       }
     }
   }
@@ -143,4 +162,9 @@
 
 .mat-mdc-menu-item:hover {
   background-color: var(--modal-item-hover-color);
+}
+
+.mat-checkbox-ripple .mat-ripple-element,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: var(--main-buttons-hover-color) !important;
 }

@@ -23,6 +23,8 @@ export class SideNavComponent implements OnInit {
   searchText: string;
   isSearchEnabled: boolean
   userSearchResponses: UserSearchResponse[] = [];
+  isShrunk = false;
+  isGlobalSearch = false;
 
   constructor(private chatNavigationService: ChatNavigationService,
               private chatService: ChatService,
@@ -115,4 +117,13 @@ export class SideNavComponent implements OnInit {
         });
     }
   }
+
+  shrinkSearchInput() {
+    this.isShrunk = true;
+  }
+
+  unShrinkSearchInput() {
+    this.isShrunk = false;
+  }
+
 }

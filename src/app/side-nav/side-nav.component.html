@@ -12,9 +12,22 @@
         </button>
       </mat-menu>
     </div>
-    <div class="side-nav-search">
-      <input class="search-input" placeholder="Search" [ngModel]="searchText" (keyup)="search($event)">
+
+    <div class="side-nav-search" tabindex="-1" contenteditable="true">
+      <input class="search-input"
+             placeholder="Search"
+             [ngModel]="searchText"
+             [ngClass]="{ 'search-shrink': isShrunk }"
+             (click)="shrinkSearchInput()"
+             (keyup)="search($event)">
+
+      <div class="search-params" [ngClass]="{ 'search-params-show': isShrunk }" tabindex="-1">
+        <mat-checkbox class="global-search-label-checkbox"
+                      [(ngModel)]="isGlobalSearch"
+        >global</mat-checkbox>
+      </div>
     </div>
+
   </div>
 
   <div class="side-nav-body">

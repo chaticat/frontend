@@ -30,6 +30,7 @@ import { ErrorInterceptor } from './common/interceptors/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRippleModule } from '@angular/material/core';
 import { LoaderComponent } from './common/loader/loader.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -42,27 +43,28 @@ import { LoaderComponent } from './common/loader/loader.component';
     AuthComponent,
     LoaderComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    FormsModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    NoopAnimationsModule,
-    MatMenuModule,
-    MatButtonModule,
-    FontAwesomeModule,
-    NgxEditorModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    NgxMatSelectSearchModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    MatRippleModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FormsModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        NoopAnimationsModule,
+        MatMenuModule,
+        MatButtonModule,
+        FontAwesomeModule,
+        NgxEditorModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        NgxMatSelectSearchModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatRippleModule,
+        MatCheckboxModule
+    ],
   providers: [
     AuthGuard,
     {

@@ -17,7 +17,7 @@ export class UserService implements OnInit {
   }
 
   getAllContactsForUser(): Observable<User[]> {
-    return this.http.get<User[]>(environment.API_URL + '/contacts');
+    return this.http.get<User[]>(environment.API_URL + '/users/contacts');
   }
 
 }
