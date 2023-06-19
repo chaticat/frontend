@@ -30,6 +30,10 @@ import { ErrorInterceptor } from './common/interceptors/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRippleModule } from '@angular/material/core';
 import { LoaderComponent } from './common/loader/loader.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { JoinChatModalComponent } from './side-nav/modal/join-chat-modal/join-chat-modal.component';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -40,7 +44,8 @@ import { LoaderComponent } from './common/loader/loader.component';
     CreateChatModalComponent,
     NotifierComponent,
     AuthComponent,
-    LoaderComponent
+    LoaderComponent,
+    JoinChatModalComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +66,10 @@ import { LoaderComponent } from './common/loader/loader.component';
     NgxMatSelectSearchModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatRippleModule
+    MatRippleModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
+    LoadingBarModule,
   ],
   providers: [
     AuthGuard,

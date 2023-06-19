@@ -8,6 +8,7 @@ import {Registration} from "./model/registration.model";
 import {HttpClient} from "@angular/common/http";
 import {Login} from "./model/login.model";
 import { ApiResponse } from '../common/model/api-response.model';
+import { RefreshToken } from './model/refresh-token.model';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -43,13 +44,31 @@ export class AuthService {
   login(loginObject: Login): Observable<Token> {
     return this.http.post<Token>(environment.API_URL + '/auth/sign-in', loginObject, this.options);
   }
-
   doesUsernameExists(username: string): Observable<boolean> {
     let options = {
       headers: {'Content-Type': 'application/json'},
       params: {username: username}
     };
     return this.http.get<boolean>(environment.API_URL + '/auth/username-exists', options);
+  }
+
+  refreshToken(refreshToken: RefreshToken): Observable<Token> {
+    return this.http.post<Token>(environment.API_URL + '/auth/refresh-token', refreshToken, this.options);
+  }
+
+  refreshTokenForUser() {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (this.jwtHelper.isTokenExpired(refreshToken)) {
+      this.logout();
+    } else {
+      const token = {} as RefreshToken;
+      token.refreshToken = refreshToken;
+      this.refreshToken(token).subscribe(
+        next => {
+          this.setUserTokens(next.accessToken, next.refreshToken, String(next.userId));
+        }
+      )
+    }
   }
 
   setUserTokens(accessToken: string, refreshToken: string, userId: string): void {

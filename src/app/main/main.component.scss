@@ -1,19 +1,46 @@
 .container {
   display: flex;
   flex-direction: row;
-  height: 100vh;
-  max-width: 110rem;
+  width: 100%;
+  max-height: 100vh;
   margin-right: auto;
   margin-left: auto;
+  overflow: hidden;
 }
 
-app-side-nav {
-  width: 26%;
-  min-width: 380px
+.side-nav {
+  height: 100vh;
+  flex: 0 0 auto;
+  width: 30%;
 }
 
-app-chat-room {
-  width: 74%;
-  min-width: 380px
+.chat-room {
+  height: 100vh;
+  flex: 0 0 auto;
+  width: 70%;
 }
 
+@media (max-width: 1260px) {
+  .side-nav {
+    width: 40%;
+  }
+
+  .chat-room {
+    width: 60%;
+  }
+}
+
+@media (max-width: 700px) {
+  .side-nav {
+    width: 100%;
+  }
+
+  .chat-room {
+    width: 100%;
+  }
+}
+
+.side-nav-hidden,
+.chat-room-hidden {
+  display: none;
+}

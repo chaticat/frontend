@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ChatNavigationService } from '../common/service/chat-navigation.service';
 import { Chat } from '../common/model/chat';
 import { ChatService } from '../service/chat-service.';
@@ -7,8 +7,10 @@ import { CreateChatModalComponent } from './modal/create-chat-modal/create-chat-
 import { EmptyChatRequest } from './model/empty-chat-request';
 import { UserService } from '../service/user-service.';
 import { AuthService } from '../auth/auth.service';
-import { SearchService } from '../service/search-service.';
 import { UserSearchResponse } from '../common/model/user-search-response';
+import { ChatSearchResponse } from '../common/model/chat-search-response';
+import { JoinChatModalComponent } from './modal/join-chat-modal/join-chat-modal.component';
+import { SideNavResizeService } from '../service/side-nav-resize.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -18,35 +20,41 @@ import { UserSearchResponse } from '../common/model/user-search-response';
 })
 export class SideNavComponent implements OnInit {
 
+  @ViewChild('globalSearchInput') globalSearchInput;
+
   userChats: Chat[] = [];
   lastInteractionChatId: string;
-  searchText: string;
   isSearchEnabled: boolean
   userSearchResponses: UserSearchResponse[] = [];
+  chatSearchResponses: ChatSearchResponse[] = [];
+  isShrunk = false;
+  isGlobalSearch = false;
 
   constructor(private chatNavigationService: ChatNavigationService,
               private chatService: ChatService,
               private userService: UserService,
               private authService: AuthService,
-              private searchService: SearchService,
+              private sideNavResizeService: SideNavResizeService,
               private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-
     this.chatService.getAllChatsForUser().subscribe(chats => {
-
       if (chats.length === 0) {
 
       } else {
         this.userChats = chats;
         this.lastInteractionChatId = chats[0].id;
-        this.openNewChat(this.userChats[0])
+
+        const isMobileSize = window.innerWidth < 700 && window.innerHeight < 900;
+        if (!isMobileSize || (isMobileSize && !this.sideNavResizeService.isNavOpen())) {
+          this.openChat(this.userChats[0])
+        }
       }
     });
   }
 
-  openNewChat(chat: Chat) {
+  openChat(chat: Chat) {
     this.lastInteractionChatId = chat.id;
     this.chatNavigationService.openChat(chat);
   }
@@ -65,14 +73,17 @@ export class SideNavComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(
       data => {
-        this.createChat(data);
+        this.createChatWithUser(data.contactId);
       }
     );
   }
 
-  private createChat(data) {
-    this.chatService.createChatWithUser(data.contactId)
-      .subscribe(chat => this.userChats.unshift(chat));
+  private createChatWithUser(userId) {
+    this.chatService.createChatWithUser(userId)
+      .subscribe(chat => {
+        this.userChats.unshift(chat)
+        this.clearSearch();
+      });
   }
 
   openCreateNewGroupModal() {
@@ -96,23 +107,119 @@ export class SideNavComponent implements OnInit {
     emptyChatRequest.name = data.name;
 
     this.chatService.createEmptyChat(emptyChatRequest)
-      .subscribe(chat => this.userChats.unshift(chat));
+      .subscribe(chat => {
+        this.userChats.unshift(chat)
+        this.clearSearch();
+      });
   }
 
   logout() {
     this.authService.logout()
   }
 
-  search($event: any) {
-    if ($event.target.value === '') {
+  applyGlobalSearch(searchText) {
+    this.search(searchText);
+    this.globalSearchInput.nativeElement.focus();
+  }
+
+  searchEvent($event: any) {
+    let searchText = $event.target.value;
+    this.search(searchText);
+  }
+
+  private search(searchText) {
+    if (searchText === '' || searchText === undefined) {
       this.isSearchEnabled = false;
       this.userSearchResponses = [];
     } else {
       this.isSearchEnabled = true;
-      this.searchService.searchUsers($event.target.value)
+
+      this.chatService.searchChats(searchText, this.isGlobalSearch)
+        .subscribe(response => {
+          this.chatSearchResponses = response;
+        });
+
+      this.userService.searchUsers(searchText, this.isGlobalSearch)
         .subscribe(response => {
           this.userSearchResponses = response;
         });
     }
+  }
+
+  joinGlobalChat(chatSearchResponse: ChatSearchResponse) {
+    if (this.isGlobalSearch) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = {
+        isChat: true,
+        chatSearchResponse: chatSearchResponse
+      }
+
+      let dialogRef = this.dialog.open(JoinChatModalComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(
+        isOpenNewChat => {
+          if (isOpenNewChat) {
+            this.chatService.getChatById(chatSearchResponse.id).subscribe(chat => {
+              this.addChatIntoUserChats(chat);
+              this.clearSearch();
+            })
+          }
+        }
+      );
+    } else {
+      this.chatService.getChatById(chatSearchResponse.id).subscribe(chat => {
+        this.addChatIntoUserChats(chat);
+        this.clearSearch();
+      })
+    }
+  }
+
+  createGlobalChat(userSearchResponse: UserSearchResponse) {
+    if (this.isGlobalSearch) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = {
+        isChat: false,
+        userSearchResponse: userSearchResponse
+      }
+
+      let dialogRef = this.dialog.open(JoinChatModalComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(
+        isOpenNewChat => {
+          if (isOpenNewChat) {
+            this.createChatWithUser(userSearchResponse.id);
+            this.lastInteractionChatId = this.userChats[0].id;
+            this.openChat(this.userChats[0]);
+            this.clearSearch();
+          }
+        });
+    } else {
+      this.createChatWithUser(userSearchResponse.id);
+      this.lastInteractionChatId = this.userChats[0].id;
+      this.openChat(this.userChats[0]);
+      this.clearSearch();
+    }
+  }
+
+  private addChatIntoUserChats(chat: Chat) {
+    this.userChats.unshift(chat);
+    this.lastInteractionChatId = this.userChats[0].id;
+    this.openChat(this.userChats[0]);
+  }
+
+  clearSearch() {
+    this.isSearchEnabled = false;
+    this.unShrinkSearchInput()
+    this.globalSearchInput.nativeElement.value = '';
+  }
+
+  shrinkSearchInput() {
+    this.isShrunk = true;
+  }
+
+  unShrinkSearchInput() {
+    this.isShrunk = false;
   }
 }

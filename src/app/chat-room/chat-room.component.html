@@ -1,6 +1,12 @@
 <div class="chat">
 
   <div class="chat-header" *ngIf="currentChat !== undefined">
+    <div *ngIf="isMobileSize" class="back-to-side-nav-btn" matRipple>
+      <button mat-icon-button (click)="backToSideNav()" type="button">
+        <mat-icon class="chat-header-actions-icon">keyboard_arrow_left</mat-icon>
+      </button>
+    </div>
+
     <div class="chat-info">
       <div class="message-from-icon-big">
       </div>
@@ -8,11 +14,12 @@
         <b class="chat-name">
           {{ currentChat.name }}
         </b>
-        <div class="last-online-status" *ngIf="currentChat.group == false">
+        <div class="last-online-status" *ngIf="currentChat.group === false || currentChat.group === undefined">
           10 min ago
         </div>
       </div>
     </div>
+
     <div class="chat-header-actions">
       <button mat-icon-button>
         <mat-icon class="chat-header-actions-icon">keyboard_arrow_down</mat-icon>
@@ -50,6 +57,9 @@
   </div>
 
   <div class="chat-footer" *ngIf="currentChat !== undefined">
+    <button mat-icon-button class="primary upload-attachments-btn" aria-label="Upload attachments">
+      <mat-icon>attach_file</mat-icon>
+    </button>
      <textarea class="message-input"
                matInput
                cdkTextareaAutosize

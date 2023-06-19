@@ -2,7 +2,7 @@ import { RxStompConfig } from '@stomp/rx-stomp';
 
 export const myRxStompConfig: RxStompConfig = {
 
-  brokerURL: 'ws://localhost:8082/ws',
+  brokerURL: 'ws://localhost/ws',
 
   connectHeaders: {
     Authorization: localStorage.getItem(`accessToken`),
@@ -10,10 +10,10 @@ export const myRxStompConfig: RxStompConfig = {
   },
 
   heartbeatIncoming: 0,
-  heartbeatOutgoing: 20000,
-  reconnectDelay: 5000,
+  heartbeatOutgoing: 200000,
+  reconnectDelay: 50000000,
 
   debug: (msg: string): void => {
-    console.log(new Date(), msg);
+  //console.log(new Date(), msg);
   },
 };

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { RxStompService } from '../service/rx-stomp.service';
 import { Message } from '@stomp/stompjs';
 import { Subscription } from 'rxjs';
@@ -7,6 +7,7 @@ import { ChatMessage, Sender } from '../common/model/chat-message';
 import { MessageRequest } from './model/message-request';
 import { ChatNavigationService } from '../common/service/chat-navigation.service';
 import { Chat } from '../common/model/chat';
+import { SideNavResizeService } from '../service/side-nav-resize.service';
 
 @Component({
   selector: 'app-chat-room',
@@ -22,14 +23,17 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   private topicSubscription: Subscription;
   messageInputValue: string;
   currentUserId: string
+  isMobileSize = false;
 
-  constructor(private rxStompService: RxStompService, private chatNavigationService: ChatNavigationService) {
+  constructor(private rxStompService: RxStompService,
+              private chatNavigationService: ChatNavigationService,
+              private sideNavResizeService: SideNavResizeService) {
     this.messageInputValue = '';
     this.currentUserId = '1';
 
     this.chatNavigationService.chatSource$.subscribe(chat => {
+      this.sideNavResizeService.setShowNav(false);
       this.currentChatId = chat.id;
-      console.log(chat)
       this.currentChat = chat;
       this.topicSubscription.unsubscribe();
       this.initChatSubscription();
@@ -37,7 +41,13 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isMobileSize = window.innerWidth < 700 && window.innerHeight < 900;
     this.initChatSubscription();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.isMobileSize = window.innerWidth < 700 && window.innerHeight < 900;
   }
 
   private initChatSubscription() {
@@ -108,5 +118,9 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
 
   onKeydown($event: any) {
     $event.preventDefault();
+  }
+
+  backToSideNav() {
+    this.sideNavResizeService.setShowNav(true);
   }
 }
