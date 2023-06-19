@@ -1,4 +1,9 @@
 <div class="container">
-  <app-side-nav></app-side-nav>
-  <app-chat-room></app-chat-room>
+
+  <div [ngClass]="(!isMobileSize) || (showSideNav && isMobileSize) ? 'side-nav' : 'side-nav-hidden'">
+    <app-side-nav></app-side-nav>
+  </div>
+  <div [ngClass]="(!isMobileSize) || (!showSideNav && isMobileSize) ? 'chat-room' : 'chat-room-hidden'">
+    <app-chat-room></app-chat-room>
+  </div>
 </div>

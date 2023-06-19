@@ -124,8 +124,6 @@ export class AuthComponent implements OnInit {
 
       this.authService.login(loginObject).subscribe(
         next => {
-          console.log(next);
-
           this.authService.setUserTokens(next.accessToken, next.refreshToken, String(next.userId));
 
           setTimeout(() => {

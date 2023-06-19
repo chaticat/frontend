@@ -1,0 +1,9 @@
+<div class="join-chat-dialog-container">
+  <h1 mat-dialog-title *ngIf="isChat">Join the '{{chatSearchResponse.name}}' chat?</h1>
+  <h1 mat-dialog-title *ngIf="!isChat">Create a new chat with {{userSearchResponse.username}}?</h1>
+
+  <mat-dialog-actions align="center">
+    <button mat-raised-button (click)="close()">No</button>
+    <button color="primary" mat-raised-button (click)="save()">Yes</button>
+  </mat-dialog-actions>
+</div>

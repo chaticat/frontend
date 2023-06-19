@@ -13,18 +13,20 @@
       </mat-menu>
     </div>
 
-    <div class="side-nav-search" tabindex="-1" contenteditable="true">
+    <div class="side-nav-search" tabindex="-1">
       <input class="search-input"
              placeholder="Search"
-             [ngModel]="searchText"
+             #globalSearchInput
              [ngClass]="{ 'search-shrink': isShrunk }"
              (click)="shrinkSearchInput()"
-             (keyup)="search($event)">
+             (keyup)="searchEvent($event)">
 
       <div class="search-params" [ngClass]="{ 'search-params-show': isShrunk }" tabindex="-1">
-        <mat-checkbox class="global-search-label-checkbox"
+        <mat-slide-toggle class="global-search-label-checkbox"
                       [(ngModel)]="isGlobalSearch"
-        >global</mat-checkbox>
+                      (click)="applyGlobalSearch(globalSearchInput.value)"
+        >global
+        </mat-slide-toggle>
       </div>
     </div>
 
@@ -34,7 +36,7 @@
     <div *ngIf="!isSearchEnabled">
       <div *ngFor="let chat of userChats">
         <div class="chat"
-             (click)="openNewChat(chat)"
+             (click)="openChat(chat)"
              [ngClass]="{'chat-selected' : lastInteractionChatId === chat.id}">
           <div class="chat-image-container">
             <div class="chat-image">
@@ -56,28 +58,56 @@
       </div>
     </div>
 
-    <div *ngIf="isSearchEnabled">
+    <div *ngIf="isSearchEnabled" class="search-result-body">
+      <ngx-loading-bar></ngx-loading-bar>
 
-
-      <div>Global Users</div>
-
-      <div *ngFor="let userSearchResult of userSearchResponses">
-        <div class="chat">
-          <div class="chat-image-container">
-            <div class="chat-image">
+      <div [ngClass]="{'search-result-block': chatSearchResponses.length > 0}">
+        <div class="search-result-header" *ngIf="chatSearchResponses.length > 0">
+          {{isGlobalSearch ? 'Groups' : 'Chats and groups'}}
+        </div>
+        <div *ngFor="let chatSearchResult of chatSearchResponses">
+          <div class="chat" (click)="joinGlobalChat(chatSearchResult)">
+            <div class="chat-image-container">
+              <div class="chat-image">
+              </div>
             </div>
-          </div>
-          <div class="chat-details">
-            <div class="chat-name">
-              {{userSearchResult.username}}
-            </div>
-            <div class="chat-last-message">
+            <div class="chat-details">
+              <div class="chat-name">
+                {{chatSearchResult.name}}
+              </div>
+              <div class="chat-last-message">
 
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div *ngIf="userSearchResponses.length === 0">
+
+      <div [ngClass]="{'search-result-block': userSearchResponses.length > 0}">
+        <div class="search-result-header" *ngIf="userSearchResponses.length > 0">
+          {{isGlobalSearch ? 'Other users' : 'Contacts'}}
+        </div>
+
+        <div *ngFor="let userSearchResult of userSearchResponses">
+          <div class="chat" (click)="createGlobalChat(userSearchResult)">
+            <div class="chat-image-container">
+              <div class="chat-image">
+              </div>
+            </div>
+            <div class="chat-details">
+              <div class="chat-name">
+                {{userSearchResult.username}}
+              </div>
+              <div class="chat-last-message">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-result-header"
+           *ngIf="userSearchResponses.length === 0 && chatSearchResponses.length === 0">
         Nothing is found
       </div>
 

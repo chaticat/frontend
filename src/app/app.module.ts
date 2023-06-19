@@ -31,6 +31,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRippleModule } from '@angular/material/core';
 import { LoaderComponent } from './common/loader/loader.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { JoinChatModalComponent } from './side-nav/modal/join-chat-modal/join-chat-modal.component';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -41,30 +44,33 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CreateChatModalComponent,
     NotifierComponent,
     AuthComponent,
-    LoaderComponent
+    LoaderComponent,
+    JoinChatModalComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
-        FormsModule,
-        MatMenuModule,
-        MatIconModule,
-        MatButtonModule,
-        MatDialogModule,
-        NoopAnimationsModule,
-        MatMenuModule,
-        MatButtonModule,
-        FontAwesomeModule,
-        NgxEditorModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        NgxMatSelectSearchModule,
-        MatSelectModule,
-        MatSnackBarModule,
-        MatRippleModule,
-        MatCheckboxModule
-    ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    NoopAnimationsModule,
+    MatMenuModule,
+    MatButtonModule,
+    FontAwesomeModule,
+    NgxEditorModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    NgxMatSelectSearchModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatRippleModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
+    LoadingBarModule,
+  ],
   providers: [
     AuthGuard,
     {
