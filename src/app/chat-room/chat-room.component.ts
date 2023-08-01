@@ -29,7 +29,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
               private chatNavigationService: ChatNavigationService,
               private sideNavResizeService: SideNavResizeService) {
     this.messageInputValue = '';
-    this.currentUserId = '1';
+    this.currentUserId = localStorage.getItem("userId");
 
     this.chatNavigationService.chatSource$.subscribe(chat => {
       this.sideNavResizeService.setShowNav(false);
